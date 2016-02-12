@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"code.google.com/p/go-uuid/uuid"
+	"github.com/satori/go.uuid"
 
 	"github.com/briannewsom/audiotool/compress"
 )
@@ -13,7 +13,8 @@ import (
 var content, err = ioutil.ReadFile("_test-res/audio.mp4")
 
 func TestCompress(t *testing.T) {
-	_, err := compress.Compress(nil, uuid.New(), "64k")
+	id := uuid.NewV4().String()
+	_, err := compress.Compress(nil, id, "64k")
 
 	if err == nil {
 		print(err)
@@ -27,7 +28,7 @@ func TestCompress(t *testing.T) {
 		t.Error("Compress(content, \"\", bitrate) should throw an error, got nil")
 	}
 
-	_, err = compress.Compress(content, uuid.New(), "bogus")
+	_, err = compress.Compress(content, id, "bogus")
 
 	if err == nil {
 		print(err)
@@ -35,7 +36,7 @@ func TestCompress(t *testing.T) {
 	}
 
 	/* Sucessful compression
-	c, err := compress.Compress(content, uuid.New(), "128k")
+	c, err := compress.Compress(content, id, "128k")
 
 	if c == nil {
 		t.Error("Compress(content, uuid, bitrate) should return content, got nil")
