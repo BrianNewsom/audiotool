@@ -1,5 +1,11 @@
-package audiotool 
+package audiotool
+
+import "flag"
 
 func main(){
-	print("this doesn't do anything for now :p")
+	var avconvPath = flag.String("avconvPath", "/usr/bin/avconv", "The location of the avconv executable on this machine")
+
+	flag.Parse()
+
+	print("You gave ", *avconvPath)
 }
