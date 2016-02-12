@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/exec"
 
-	"audiotool/common"
+	"github.com/briannewsom/audiotool/common"
 )
 
 const avconvPath = "/usr/bin/avconv"
