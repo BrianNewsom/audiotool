@@ -11,7 +11,7 @@ func TestConvertWavToM4a(t *testing.T) {
 	f, err := audiotool.ConvertWavToM4a("_test-res/hi.wav")
 
 	if err != nil {
-		t.Error("Failed to convert .wav to .m4a ")
+		t.Error("Failed to convert .wav to .m4a - " + err.Error())
 	}
 
 	util.CleanTempFiles(f)

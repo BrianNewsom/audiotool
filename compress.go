@@ -2,8 +2,8 @@ package audiotool
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
+	"log"
 	"os/exec"
 
 	"github.com/briannewsom/audiotool/util"
@@ -46,14 +46,15 @@ func Compress(content []byte, uuid string, bitrate string) ([]byte, error) {
 
 func ChangeBitrate(inputFileName string, outputFileName string, bitrate string) error {
 	// Returns outputFileName
-	cmd := exec.Command(util.AVConvPath, "-y", "-i", inputFileName, "-strict", "experimental", "-b", bitrate, outputFileName)
+	cmd := exec.Command(getAVConvPath(), "-y", "-i", inputFileName,
+		"-strict", "experimental", "-b", bitrate, outputFileName)
 
 	err := cmd.Start()
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Processing Audio File...\n")
+	log.Printf("Changing Bitrate of audio file %s to %s", inputFileName, bitrate)
 
 	err = cmd.Wait()
 
@@ -61,71 +62,8 @@ func ChangeBitrate(inputFileName string, outputFileName string, bitrate string) 
 		return err
 	}
 
-	fmt.Printf("Successfully processed audio file.\n")
+	log.Print("Successfully processed audio file.\n")
 
 	return nil
 
 }
-
-/* For converting previously ignored files - to be used later
-
-func DownloadToFile(uri string, dst string) {
-	fmt.Printf("DownloadToFile From: %s.\n", uri)
-	if d, err := HTTPDownload(uri); err == nil {
-		fmt.Printf("downloaded %s.\n", uri)
-		if WriteFile(dst, d) == nil {
-			fmt.Printf("saved %s as %s\n", uri, dst)
-		}
-	}
-}
-
-func HTTPDownload(uri string) ([]byte, error) {
-	fmt.Printf("HTTPDownload From: %s.\n", uri)
-	res, err := http.Get(uri)
-	if err != nil {
-	}
-	defer res.Body.Close()
-	d, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-	}
-	fmt.Printf("ReadFile: Size of download: %d\n", len(d))
-	return d, err
-}
-
-func DownloadAndCompress(Uuid string) error {
-	audioUrl := db.S3BucketPath + "/" + Uuid + ".mp4"
-	inputFileName := "/tmp/raw-" + Uuid + ".mp4"
-	outputFileName := "/tmp/" + Uuid + ".mp4"
-
-	fmt.Printf("%s - %s", inputFileName, outputFileName)
-
-	DownloadToFile(audioUrl, inputFileName)
-
-	err := ChangeBitrate(inputFileName, outputFileName, bitrate)
-
-	if err != nil {
-		return err
-	}
-
-	// Upload w/ s3
-
-	// First read file into data slice
-	d, _ := ioutil.ReadFile(outputFileName)
-
-	db.UploadToS3(d, outputFileName)
-
-	// Change and update url
-
-	// Clean up files
-
-	return nil
-}
-
-/*
-func DownloadAudio(url string) []byte {
-	resp, err := http.Get(url)
-	defer resp.Body.Close()
-
-	file := resp.body
-}
-*/

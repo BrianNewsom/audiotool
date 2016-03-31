@@ -19,7 +19,7 @@ func TestConcatenate(t *testing.T) {
 	f, err := audiotool.Concatenate("_test-res/hi.wav", "_test-res/how-are-you.wav", ".wav")
 
 	if err != nil {
-		t.Error("Failed to concatenate audio files")
+		t.Error("Failed to concatenate audio files - " + err.Error())
 	}
 
 	util.CleanTempFiles(f)

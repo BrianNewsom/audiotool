@@ -2,6 +2,7 @@ package audiotool
 
 import (
 	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
 
@@ -27,13 +28,19 @@ func ConvertWavToM4aBytes(f string) ([]byte, error) {
 func ConvertWavToM4a(f string) (string, error) {
 	outputFile, _ := ioutil.TempFile("/tmp", "convert-")
 
-	outputFileName := outputFile.Name() + util.M4aExt
+	outputFileName := outputFile.Name() + M4aExt
 
 	os.Rename(outputFile.Name(), outputFileName)
 
-	cmd := exec.Command(util.AVConvPath, "-y", "-i", f, outputFileName)
+	log.Printf("Converting wav file %s to m4a file %s", f, outputFileName)
 
-	cmd.CombinedOutput()
+	cmd := exec.Command(getAVConvPath(), "-y", "-i", f, outputFileName)
+
+	err := cmd.Run()
+
+	if err != nil {
+		return "", err
+	}
 
 	return outputFileName, nil
 }
