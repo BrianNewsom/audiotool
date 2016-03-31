@@ -1,33 +1,29 @@
-package compress
+package audiotool
 
 import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"os/exec"
 
-	"github.com/briannewsom/audiotool/common"
+	"github.com/briannewsom/audiotool/util"
 )
-
-const avconvPath = "/usr/bin/avconv"
-const tmpDir = "/tmp"
 
 func Compress(content []byte, uuid string, bitrate string) ([]byte, error) {
 	var inputFileName string
 	var outputFileName string
 
 	if uuid != "" {
-		inputFileName = "/tmp/raw-" + uuid + ".mp4"
-		outputFileName = "/tmp/" + uuid + ".mp4"
+		inputFileName = "/tmp/raw-" + uuid + ".m4a"
+		outputFileName = "/tmp/" + uuid + ".m4a"
 	} else {
 		return nil, errors.New("No uuid given")
 	}
 
-	defer CleanTempFiles(inputFileName, outputFileName)
+	defer util.CleanTempFiles(inputFileName, outputFileName)
 
 	if content != nil {
-		common.WriteFile(inputFileName, content)
+		util.WriteFile(inputFileName, content)
 	} else {
 		return nil, errors.New("No content supplied to compress")
 	}
@@ -48,16 +44,9 @@ func Compress(content []byte, uuid string, bitrate string) ([]byte, error) {
 
 }
 
-func CleanTempFiles(inputFileName string, outputFileName string) error {
-	err := os.Remove(inputFileName)
-	err = os.Remove(outputFileName)
-
-	return err
-}
-
 func ChangeBitrate(inputFileName string, outputFileName string, bitrate string) error {
 	// Returns outputFileName
-	cmd := exec.Command(avconvPath, "-y", "-i", inputFileName, "-strict", "experimental", "-b", bitrate, outputFileName)
+	cmd := exec.Command(util.AVConvPath, "-y", "-i", inputFileName, "-strict", "experimental", "-b", bitrate, outputFileName)
 
 	err := cmd.Start()
 	if err != nil {
