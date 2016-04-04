@@ -10,8 +10,10 @@ import (
 	"github.com/briannewsom/audiotool/util"
 )
 
-func ConcatenateToBytes(ext, f1, f2 string) ([]byte, error) {
-	fName, err := Concatenate(ext, f1, f2)
+func ConcatenateToBytes(ext string, fs ...string) ([]byte, error) {
+	fName, err := Concatenate(ext, fs...)
+
+	log.Printf("%s", fName)
 
 	if err != nil {
 		return nil, err

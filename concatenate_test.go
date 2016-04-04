@@ -15,6 +15,18 @@ func ExampleConcatenateToBytes() {
 	audiotool.ConcatenateToBytes(".wav", "_test-res/hi.wav", "_test-res/how-are-you.wav")
 }
 
+func TestConcatenateToBytes(t *testing.T) {
+	b, err := audiotool.ConcatenateToBytes(".wav", "_test-res/hi.wav", "_test-res/how-are-you.wav")
+
+	if err != nil {
+		t.Error("Failed to concatenate audio files to bytes - " + err.Error())
+	}
+
+	if b == nil {
+		t.Error("ConcatenateToBytes returned an empty slice")
+	}
+}
+
 func TestConcatenate(t *testing.T) {
 	_, err := audiotool.Concatenate(".wav", "_test-res/hi.wav", "_test-res/how-are-you.wav")
 
