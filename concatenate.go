@@ -29,8 +29,10 @@ func ConcatenateToBytes(ext string, fs ...string) ([]byte, error) {
 
 func Concatenate(ext string, fs ...string) (string, error) {
 	// TODO: Make this work both directions at the same time
-	if len(fs) < 2 {
+	if len(fs) < 1 {
 		return "", errors.New("Please provide more than one file to concatenate!")
+	} else if len(fs) == 1 {
+		return fs[0], nil
 	}
 
 	outputFile, err := ioutil.TempFile("/tmp", "concat-")
