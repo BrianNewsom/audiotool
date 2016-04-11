@@ -8,7 +8,7 @@ import (
 )
 
 func TestConvertWavToM4a(t *testing.T) {
-	f, err := audiotool.ConvertWavToM4a("_test-res/hi.wav")
+	f, err := audiotool.ConvertWavToM4a("_test-res/hi.wav", "128k")
 
 	if err != nil {
 		t.Error("Failed to convert .wav to .m4a - " + err.Error())
